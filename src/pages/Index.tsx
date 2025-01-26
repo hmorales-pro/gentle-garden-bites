@@ -116,7 +116,7 @@ const Index = () => {
           </div>
         </section>
 
-        <section className="mb-16 bg-white rounded-lg p-8 max-w-4xl mx-auto">
+        <section className="mb-16 bg-cream/50 rounded-lg p-8 max-w-4xl mx-auto">
           <h2 className="font-outfit font-medium text-2xl mb-6 text-center">Pourquoi la Cuisine Végane ?</h2>
           <div className="grid md:grid-cols-2 gap-8">
             <div>
@@ -158,7 +158,7 @@ const Index = () => {
         <section className="mb-16 max-w-4xl mx-auto">
           <h2 className="font-outfit font-medium text-2xl mb-6 text-center">Petites Anecdotes de Cuisine</h2>
           <div className="grid gap-6 md:grid-cols-2">
-            <div className="bg-white p-6 rounded-lg">
+            <div className="bg-cream/50 p-6 rounded-lg">
               <Quote className="h-8 w-8 text-neutral mb-4" />
               <p className="text-neutral-600 mb-4">
                 "Mon premier gâteau végan ? Un véritable désastre ! J'avais remplacé les œufs 
@@ -168,7 +168,7 @@ const Index = () => {
               </p>
               <p className="text-sm text-neutral-500 italic">- Une histoire de persévérance</p>
             </div>
-            <div className="bg-white p-6 rounded-lg">
+            <div className="bg-cream/50 p-6 rounded-lg">
               <Quote className="h-8 w-8 text-neutral mb-4" />
               <p className="text-neutral-600 mb-4">
                 "Ma grand-mère était dubitative quand je lui ai dit que j'allais transformer 
@@ -181,7 +181,7 @@ const Index = () => {
           </div>
         </section>
 
-        <section className="mb-16 bg-white rounded-lg p-8 max-w-2xl mx-auto">
+        <section className="mb-16 bg-cream/50 rounded-lg p-8 max-w-2xl mx-auto">
           <h2 className="font-outfit font-medium text-2xl mb-6 text-center">Ce que vous en pensez</h2>
           <div className="grid gap-6 md:grid-cols-2">
             {testimonials.map((testimonial) => (
