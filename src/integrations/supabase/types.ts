@@ -12,39 +12,42 @@ export type Database = {
       recipes: {
         Row: {
           anecdote: string | null
+          astuce: string | null
           created_at: string
-          description: string
           id: string
-          image_url: string
+          image: string
           ingredients: string[]
-          instructions: string[]
-          prep_time: string
+          instruction: string[]
+          nom_recette: string
           slug: string
-          title: string
+          story: string | null
+          time_preparation: string
         }
         Insert: {
           anecdote?: string | null
+          astuce?: string | null
           created_at?: string
-          description: string
           id?: string
-          image_url: string
+          image: string
           ingredients?: string[]
-          instructions?: string[]
-          prep_time: string
+          instruction?: string[]
+          nom_recette: string
           slug: string
-          title: string
+          story?: string | null
+          time_preparation: string
         }
         Update: {
           anecdote?: string | null
+          astuce?: string | null
           created_at?: string
-          description?: string
           id?: string
-          image_url?: string
+          image?: string
           ingredients?: string[]
-          instructions?: string[]
-          prep_time?: string
+          instruction?: string[]
+          nom_recette?: string
           slug?: string
-          title?: string
+          story?: string | null
+          time_preparation?: string
         }
         Relationships: []
       }

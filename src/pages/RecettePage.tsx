@@ -15,13 +15,14 @@ import {
 
 interface Recipe {
   id: string;
-  title: string;
-  description: string;
-  prep_time: string;
-  image_url: string;
+  nom_recette: string;
+  time_preparation: string;
+  image: string;
   ingredients: string[];
-  instructions: string[];
+  instruction: string[];
   anecdote?: string;
+  story?: string;
+  astuce?: string;
   slug: string;
   created_at: string;
 }
@@ -105,7 +106,7 @@ const RecettePage = () => {
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage>{recette.title}</BreadcrumbPage>
+              <BreadcrumbPage>{recette.nom_recette}</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
@@ -113,26 +114,31 @@ const RecettePage = () => {
         <article className="max-w-4xl mx-auto bg-white rounded-lg shadow-sm overflow-hidden">
           <div className="aspect-video w-full">
             <img
-              src={recette.image_url}
-              alt={recette.title}
+              src={recette.image}
+              alt={recette.nom_recette}
               className="w-full h-full object-cover"
             />
           </div>
           <div className="p-6 md:p-8">
             <h1 className="font-outfit font-semibold text-4xl mb-4">
-              {recette.title}
+              {recette.nom_recette}
             </h1>
-            <p className="text-neutral-600 mb-6">
-              {recette.description}
-            </p>
+            
             <div className="flex items-center gap-2 text-sm text-neutral mb-6">
-              <span>Temps de préparation : {recette.prep_time}</span>
+              <span>Temps de préparation : {recette.time_preparation}</span>
             </div>
             
             {recette.anecdote && (
               <div className="mb-8 p-4 bg-sage/10 rounded-lg">
                 <h2 className="font-outfit font-medium text-xl mb-2">Le saviez-vous ?</h2>
                 <p className="text-neutral-600">{recette.anecdote}</p>
+              </div>
+            )}
+
+            {recette.story && (
+              <div className="mb-8">
+                <h2 className="font-outfit font-medium text-xl mb-2">L'histoire de la recette</h2>
+                <p className="text-neutral-600">{recette.story}</p>
               </div>
             )}
             
@@ -156,7 +162,7 @@ const RecettePage = () => {
                   Instructions
                 </h2>
                 <ol className="space-y-4">
-                  {recette.instructions.map((instruction, index) => (
+                  {recette.instruction.map((instruction, index) => (
                     <li key={index} className="flex gap-4">
                       <span className="font-outfit font-medium text-sage">
                         {index + 1}.
@@ -167,6 +173,13 @@ const RecettePage = () => {
                 </ol>
               </section>
             </div>
+
+            {recette.astuce && (
+              <div className="mt-8 p-4 bg-sage/10 rounded-lg">
+                <h2 className="font-outfit font-medium text-xl mb-2">Astuce du chef</h2>
+                <p className="text-neutral-600">{recette.astuce}</p>
+              </div>
+            )}
           </div>
         </article>
       </main>
