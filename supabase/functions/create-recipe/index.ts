@@ -1,4 +1,5 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+import { HfInference } from 'https://esm.sh/@huggingface/inference@2.3.2'
 import "https://deno.land/x/xhr@0.1.0/mod.ts"
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 
@@ -15,13 +16,38 @@ const corsHeaders = {
 interface RecipePayload {
   nom_recette: string
   time_preparation: string
-  image: string
+  image?: string
   ingredients: string[]
   instruction: string[]
   anecdote?: string
   story?: string
   astuce?: string
   category_id?: string
+}
+
+async function generateImage(recipeName: string): Promise<string> {
+  try {
+    console.log('Generating image for recipe:', recipeName)
+    const hf = new HfInference(Deno.env.get('HUGGING_FACE'))
+    
+    const prompt = `A professional food photography of ${recipeName}, high quality, realistic, appetizing, on a beautiful plate, restaurant quality, soft lighting`
+    
+    const image = await hf.textToImage({
+      inputs: prompt,
+      model: 'black-forest-labs/FLUX.1-schnell',
+    })
+
+    // Convert the blob to a base64 string
+    const arrayBuffer = await image.arrayBuffer()
+    const base64 = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)))
+    const dataUrl = `data:image/png;base64,${base64}`
+    
+    console.log('Image generated successfully')
+    return dataUrl
+  } catch (error) {
+    console.error('Error generating image:', error)
+    throw error
+  }
 }
 
 function generateSlug(title: string): string {
@@ -47,8 +73,8 @@ serve(async (req) => {
     const recipeData: RecipePayload = await req.json()
     console.log('Received recipe data:', recipeData)
 
-    // Validate required fields
-    const requiredFields = ['nom_recette', 'time_preparation', 'image', 'ingredients', 'instruction']
+    // Validate required fields (excluding image since it's now optional)
+    const requiredFields = ['nom_recette', 'time_preparation', 'ingredients', 'instruction']
     for (const field of requiredFields) {
       if (!recipeData[field as keyof RecipePayload]) {
         console.log(`Missing required field: ${field}`)
@@ -59,6 +85,19 @@ serve(async (req) => {
             headers: { ...corsHeaders, 'Content-Type': 'application/json' }
           }
         )
+      }
+    }
+
+    // If no image is provided, generate one
+    if (!recipeData.image) {
+      console.log('No image provided, generating one...')
+      try {
+        recipeData.image = await generateImage(recipeData.nom_recette)
+        console.log('Image generated and added to recipe data')
+      } catch (error) {
+        console.error('Error generating image:', error)
+        // Continue without image if generation fails
+        console.log('Continuing without image due to generation error')
       }
     }
 
