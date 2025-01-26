@@ -3,17 +3,17 @@ import { RecipeCard } from "./RecipeCard";
 export const FeaturedRecipes = () => {
   const featuredRecipes = [
     {
+      id: "1",
       title: "Curry de Pois Chiches",
       description: "Un plat réconfortant aux saveurs indiennes",
-      duration: "30 min",
-      difficulty: "Facile",
+      prepTime: "30 min",
       image: "https://images.unsplash.com/photo-1582562124811-c09040d0a901"
     },
     {
+      id: "2",
       title: "Bowl Buddha Coloré",
       description: "Un repas équilibré et nutritif",
-      duration: "25 min",
-      difficulty: "Facile",
+      prepTime: "25 min",
       image: "https://images.unsplash.com/photo-1721322800607-8c38375eef04"
     }
   ];
@@ -25,8 +25,8 @@ export const FeaturedRecipes = () => {
           Recettes du Moment
         </h2>
         <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-          {featuredRecipes.map((recipe, index) => (
-            <RecipeCard key={index} {...recipe} />
+          {featuredRecipes.map((recipe) => (
+            <RecipeCard key={recipe.id} {...recipe} />
           ))}
         </div>
       </div>
