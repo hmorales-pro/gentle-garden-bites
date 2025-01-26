@@ -222,7 +222,7 @@ const Index = () => {
                 required
               />
             </div>
-            <Button type="submit" className="w-full bg-sage hover:bg-sage/90">
+            <Button type="submit" className="w-full bg-neutral text-white hover:bg-neutral/90">
               Envoyer
             </Button>
           </form>
