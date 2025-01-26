@@ -1,4 +1,5 @@
 import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 import { RecipeCard } from "@/components/RecipeCard";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -228,6 +229,8 @@ const Index = () => {
           </form>
         </section>
       </main>
+
+      <Footer />
     </div>
   );
 };
