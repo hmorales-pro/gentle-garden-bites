@@ -106,7 +106,7 @@ export type Database = {
           category_id: string | null
           created_at: string
           id: string
-          image: string
+          image: string | null
           ingredients: string[]
           instruction: string[]
           nom_recette: string
@@ -120,7 +120,7 @@ export type Database = {
           category_id?: string | null
           created_at?: string
           id?: string
-          image: string
+          image?: string | null
           ingredients?: string[]
           instruction?: string[]
           nom_recette: string
@@ -134,7 +134,7 @@ export type Database = {
           category_id?: string | null
           created_at?: string
           id?: string
-          image?: string
+          image?: string | null
           ingredients?: string[]
           instruction?: string[]
           nom_recette?: string
