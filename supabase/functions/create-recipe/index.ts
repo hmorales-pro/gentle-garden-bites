@@ -25,7 +25,7 @@ interface RecipePayload {
   category_id?: string
 }
 
-async function generateImage(recipeName: string): Promise<string> {
+async function generateImage(recipeName: string): Promise<string | null> {
   try {
     console.log('Generating image for recipe:', recipeName)
     const hf = new HfInference(Deno.env.get('HUGGING_FACE'))
@@ -46,7 +46,7 @@ async function generateImage(recipeName: string): Promise<string> {
     return dataUrl
   } catch (error) {
     console.error('Error generating image:', error)
-    throw error
+    return null
   }
 }
 
@@ -73,7 +73,7 @@ serve(async (req) => {
     const recipeData: RecipePayload = await req.json()
     console.log('Received recipe data:', recipeData)
 
-    // Validate required fields (excluding image since it's now optional)
+    // Validate required fields
     const requiredFields = ['nom_recette', 'time_preparation', 'ingredients', 'instruction']
     for (const field of requiredFields) {
       if (!recipeData[field as keyof RecipePayload]) {
@@ -88,16 +88,15 @@ serve(async (req) => {
       }
     }
 
-    // If no image is provided, generate one
+    // If no image is provided, try to generate one
     if (!recipeData.image) {
-      console.log('No image provided, generating one...')
-      try {
-        recipeData.image = await generateImage(recipeData.nom_recette)
+      console.log('No image provided, attempting to generate one...')
+      const generatedImage = await generateImage(recipeData.nom_recette)
+      if (generatedImage) {
+        recipeData.image = generatedImage
         console.log('Image generated and added to recipe data')
-      } catch (error) {
-        console.error('Error generating image:', error)
-        // Continue without image if generation fails
-        console.log('Continuing without image due to generation error')
+      } else {
+        console.log('Failed to generate image, continuing without image')
       }
     }
 
