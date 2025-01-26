@@ -36,35 +36,36 @@ export const Header = () => {
           </div>
 
           {isMenuOpen && (
-            <div className="md:hidden py-4">
-              <nav className="flex flex-col space-y-4">
-                <Link 
-                  to="/" 
-                  className="text-neutral-600 hover:text-neutral-800 transition-colors"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Accueil
-                </Link>
-                <Link 
-                  to="/recettes" 
-                  className="text-neutral-600 hover:text-neutral-800 transition-colors"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Recettes
-                </Link>
-                <Link 
-                  to="/about" 
-                  className="text-neutral-600 hover:text-neutral-800 transition-colors"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  À Propos
-                </Link>
-              </nav>
+            <div className="fixed inset-0 bg-white z-40 md:hidden">
+              <div className="pt-20 px-4">
+                <nav className="flex flex-col space-y-4">
+                  <Link 
+                    to="/" 
+                    className="text-neutral-600 hover:text-neutral-800 transition-colors"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Accueil
+                  </Link>
+                  <Link 
+                    to="/recettes" 
+                    className="text-neutral-600 hover:text-neutral-800 transition-colors"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Recettes
+                  </Link>
+                  <Link 
+                    to="/about" 
+                    className="text-neutral-600 hover:text-neutral-800 transition-colors"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    À Propos
+                  </Link>
+                </nav>
+              </div>
             </div>
           )}
         </div>
       </header>
-      {/* Spacer div to prevent content from being hidden under fixed header */}
       <div className="h-16"></div>
     </>
   );

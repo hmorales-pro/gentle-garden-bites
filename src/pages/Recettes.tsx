@@ -3,12 +3,19 @@ import { Footer } from "@/components/Footer";
 import { RecipeCard } from "@/components/RecipeCard";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
+import { useSearchParams } from "react-router-dom";
 
-const fetchRecipes = async () => {
-  const { data, error } = await supabase
+const fetchRecipes = async (categorySlug?: string) => {
+  let query = supabase
     .from('recipes')
-    .select('*')
+    .select('*, categories!inner(*)')
     .order('created_at', { ascending: false });
+
+  if (categorySlug) {
+    query = query.eq('categories.slug', categorySlug);
+  }
+
+  const { data, error } = await query;
 
   if (error) {
     console.error('Supabase error:', error);
@@ -18,9 +25,12 @@ const fetchRecipes = async () => {
 };
 
 const Recettes = () => {
+  const [searchParams] = useSearchParams();
+  const categorySlug = searchParams.get('category');
+
   const { data: recipes, isLoading, error } = useQuery({
-    queryKey: ['recipes'],
-    queryFn: fetchRecipes,
+    queryKey: ['recipes', categorySlug],
+    queryFn: () => fetchRecipes(categorySlug || undefined),
   });
 
   if (error) {
@@ -32,7 +42,7 @@ const Recettes = () => {
       <Header />
       <main className="container mx-auto px-4 py-8">
         <h1 className="font-outfit font-semibold text-4xl md:text-5xl mb-8 text-center">
-          Nos Recettes
+          {categorySlug ? `Nos ${recipes?.[0]?.categories?.name || 'Recettes'}` : 'Nos Recettes'}
         </h1>
         
         {isLoading && (
