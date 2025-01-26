@@ -10,7 +10,10 @@ const fetchRecipes = async () => {
     .select('*')
     .order('created_at', { ascending: false });
 
-  if (error) throw error;
+  if (error) {
+    console.error('Supabase error:', error);
+    throw error;
+  }
   return data;
 };
 
@@ -19,6 +22,10 @@ const Recettes = () => {
     queryKey: ['recipes'],
     queryFn: fetchRecipes,
   });
+
+  if (error) {
+    console.error('Query error:', error);
+  }
 
   return (
     <div className="min-h-screen bg-sage/20">
