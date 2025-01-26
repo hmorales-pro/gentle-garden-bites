@@ -58,12 +58,11 @@ const Recettes = () => {
             <RecipeCard
               key={recipe.id}
               id={recipe.id}
-              title={recipe.title}
-              description={recipe.description}
-              prepTime={recipe.prep_time}
-              image={recipe.image_url}
+              nom_recette={recipe.nom_recette}
+              time_preparation={recipe.time_preparation}
+              image={recipe.image}
               slug={recipe.slug}
-              createdAt={recipe.created_at}
+              created_at={recipe.created_at}
             />
           ))}
         </div>
