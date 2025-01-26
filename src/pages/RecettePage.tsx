@@ -1,9 +1,17 @@
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
 interface Recipe {
   id: string;
@@ -49,7 +57,7 @@ const RecettePage = () => {
     return (
       <div className="min-h-screen bg-sage/20">
         <Header />
-        <main className="container mx-auto px-4 py-8">
+        <main className="container mx-auto px-4 py-8 mt-16">
           <div className="text-center">Chargement...</div>
         </main>
         <Footer />
@@ -66,7 +74,7 @@ const RecettePage = () => {
     return (
       <div className="min-h-screen bg-sage/20">
         <Header />
-        <main className="container mx-auto px-4 py-8">
+        <main className="container mx-auto px-4 py-8 mt-16">
           <h1 className="font-outfit font-semibold text-4xl text-center">
             Recette non trouvée
           </h1>
@@ -81,7 +89,27 @@ const RecettePage = () => {
   return (
     <div className="min-h-screen bg-sage/20">
       <Header />
-      <main className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-4 py-8 mt-16">
+        <Breadcrumb className="mb-6">
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink asChild>
+                <Link to="/">Accueil</Link>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbLink asChild>
+                <Link to="/recettes">Recettes</Link>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>{recette.title}</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+
         <article className="max-w-4xl mx-auto bg-white rounded-lg shadow-sm overflow-hidden">
           <div className="aspect-video w-full">
             <img
