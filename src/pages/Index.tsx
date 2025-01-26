@@ -159,7 +159,7 @@ const Index = () => {
           <h2 className="font-outfit font-medium text-2xl mb-6 text-center">Petites Anecdotes de Cuisine</h2>
           <div className="grid gap-6 md:grid-cols-2">
             <div className="bg-white p-6 rounded-lg">
-              <Quote className="h-8 w-8 text-sage mb-4" />
+              <Quote className="h-8 w-8 text-neutral mb-4" />
               <p className="text-neutral-600 mb-4">
                 "Mon premier gâteau végan ? Un véritable désastre ! J'avais remplacé les œufs 
                 par trop de compote de pommes... Résultat : un gâteau qui ressemblait plus à 
@@ -169,7 +169,7 @@ const Index = () => {
               <p className="text-sm text-neutral-500 italic">- Une histoire de persévérance</p>
             </div>
             <div className="bg-white p-6 rounded-lg">
-              <Quote className="h-8 w-8 text-sage mb-4" />
+              <Quote className="h-8 w-8 text-neutral mb-4" />
               <p className="text-neutral-600 mb-4">
                 "Ma grand-mère était dubitative quand je lui ai dit que j'allais transformer 
                 sa recette de blanquette en version végane. Mais quand elle a goûté ma version 
