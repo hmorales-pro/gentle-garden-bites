@@ -130,7 +130,7 @@ const RecettePage = () => {
             
             {recette.anecdote && (
               <div className="mb-8 p-4 bg-sage/10 rounded-lg">
-                <h2 className="font-outfit font-medium text-xl mb-2">Le saviez-vous ?</h2>
+                <h2 className="font-outfit font-medium text-xl mb-2">Anecdote</h2>
                 <p className="text-neutral-600">{recette.anecdote}</p>
               </div>
             )}
