@@ -1,6 +1,12 @@
 import { Header } from "@/components/Header";
 import { RecipeCard } from "@/components/RecipeCard";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
+import { Quote } from "lucide-react";
 
 const featuredRecipes = [
   {
@@ -26,7 +32,34 @@ const featuredRecipes = [
   }
 ];
 
+const testimonials = [
+  {
+    id: 1,
+    content: "Grâce aux recettes de Jade, j'ai enfin osé me lancer dans la cuisine végane. Ses astuces et son humour rendent tout tellement plus simple !",
+    author: "Marie L."
+  },
+  {
+    id: 2,
+    content: "Je ne pensais pas qu'on pouvait manger aussi bien en étant végan. Les recettes sont délicieuses et faciles à suivre.",
+    author: "Thomas R."
+  }
+];
+
 const Index = () => {
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const { toast } = useToast();
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    toast({
+      title: "Message envoyé !",
+      description: "Merci de m'avoir contactée. Je vous répondrai dès que possible.",
+    });
+    setEmail("");
+    setMessage("");
+  };
+
   return (
     <div className="min-h-screen bg-sage/20">
       <Header />
@@ -83,13 +116,116 @@ const Index = () => {
           </div>
         </section>
 
-        <section>
-          <h2 className="font-outfit font-medium text-2xl mb-6 text-center">Mes Dernières Créations</h2>
+        <section className="mb-16 bg-white rounded-lg p-8 max-w-4xl mx-auto">
+          <h2 className="font-outfit font-medium text-2xl mb-6 text-center">Pourquoi la Cuisine Végane ?</h2>
+          <div className="grid md:grid-cols-2 gap-8">
+            <div>
+              <h3 className="font-outfit font-medium text-xl mb-3">Pour les Débutants</h3>
+              <p className="text-neutral-600 mb-4">
+                Vous pensez que la cuisine végane est compliquée ? Détrompez-vous ! 
+                Je vous guide pas à pas avec des recettes simples et des ingrédients faciles à trouver.
+              </p>
+              <ul className="list-disc list-inside text-neutral-600 space-y-2">
+                <li>Des alternatives simples aux plats traditionnels</li>
+                <li>Des astuces pour remplacer les produits animaux</li>
+                <li>Des menus équilibrés et gourmands</li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-outfit font-medium text-xl mb-3">Pour les Curieux</h3>
+              <p className="text-neutral-600 mb-4">
+                Envie de découvrir de nouvelles saveurs ? La cuisine végane ouvre un monde 
+                de possibilités créatives et délicieuses !
+              </p>
+              <ul className="list-disc list-inside text-neutral-600 space-y-2">
+                <li>Des recettes du monde entier naturellement véganes</li>
+                <li>Des associations surprenantes et savoureuses</li>
+                <li>Des desserts gourmands sans produits animaux</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section className="mb-16">
+          <h2 className="font-outfit font-medium text-2xl mb-8 text-center">Mes Dernières Créations</h2>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {featuredRecipes.map((recipe) => (
               <RecipeCard key={recipe.id} {...recipe} />
             ))}
           </div>
+        </section>
+
+        <section className="mb-16 max-w-4xl mx-auto">
+          <h2 className="font-outfit font-medium text-2xl mb-6 text-center">Petites Anecdotes de Cuisine</h2>
+          <div className="grid gap-6 md:grid-cols-2">
+            <div className="bg-white p-6 rounded-lg">
+              <Quote className="h-8 w-8 text-sage mb-4" />
+              <p className="text-neutral-600 mb-4">
+                "Mon premier gâteau végan ? Un véritable désastre ! J'avais remplacé les œufs 
+                par trop de compote de pommes... Résultat : un gâteau qui ressemblait plus à 
+                une soupe ! Aujourd'hui, je maîtrise parfaitement les proportions, et je peux 
+                vous dire que mes gâteaux font l'unanimité, même auprès des plus sceptiques !"
+              </p>
+              <p className="text-sm text-neutral-500 italic">- Une histoire de persévérance</p>
+            </div>
+            <div className="bg-white p-6 rounded-lg">
+              <Quote className="h-8 w-8 text-sage mb-4" />
+              <p className="text-neutral-600 mb-4">
+                "Ma grand-mère était dubitative quand je lui ai dit que j'allais transformer 
+                sa recette de blanquette en version végane. Mais quand elle a goûté ma version 
+                aux champignons et protéines de soja, elle m'a demandé la recette ! C'est ma 
+                plus belle victoire."
+              </p>
+              <p className="text-sm text-neutral-500 italic">- La conversion de Mamie</p>
+            </div>
+          </div>
+        </section>
+
+        <section className="mb-16 bg-white rounded-lg p-8 max-w-2xl mx-auto">
+          <h2 className="font-outfit font-medium text-2xl mb-6 text-center">Ce que vous en pensez</h2>
+          <div className="grid gap-6 md:grid-cols-2">
+            {testimonials.map((testimonial) => (
+              <div key={testimonial.id} className="bg-cream/30 p-6 rounded-lg">
+                <p className="text-neutral-600 mb-4 italic">"{testimonial.content}"</p>
+                <p className="text-sm text-neutral-500 font-medium">{testimonial.author}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="max-w-xl mx-auto">
+          <h2 className="font-outfit font-medium text-2xl mb-6 text-center">Me Contacter</h2>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-neutral-600 mb-1">
+                Email
+              </label>
+              <Input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="votre@email.com"
+                required
+              />
+            </div>
+            <div>
+              <label htmlFor="message" className="block text-sm font-medium text-neutral-600 mb-1">
+                Message
+              </label>
+              <Textarea
+                id="message"
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                placeholder="Votre message..."
+                className="min-h-[150px]"
+                required
+              />
+            </div>
+            <Button type="submit" className="w-full bg-sage hover:bg-sage/90">
+              Envoyer
+            </Button>
+          </form>
         </section>
       </main>
     </div>
