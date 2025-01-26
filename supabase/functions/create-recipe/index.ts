@@ -18,7 +18,7 @@ interface RecipePayload {
   time_preparation: string
   image?: string
   ingredients: string[]
-  instruction: string[]
+  instructions: string[] // Changed from instruction to instructions to match incoming data
   anecdote?: string
   story?: string
   astuce?: string
@@ -74,7 +74,7 @@ serve(async (req) => {
     console.log('Received recipe data:', recipeData)
 
     // Validate required fields
-    const requiredFields = ['nom_recette', 'time_preparation', 'ingredients', 'instruction']
+    const requiredFields = ['nom_recette', 'time_preparation', 'ingredients', 'instructions']
     for (const field of requiredFields) {
       if (!recipeData[field as keyof RecipePayload]) {
         console.log(`Missing required field: ${field}`)
@@ -110,11 +110,20 @@ serve(async (req) => {
     const slug = `${year}/${month}/${baseSlug}`
     console.log('Generated slug:', slug)
 
-    // Insert the recipe into the database with the generated slug
-    console.log('Attempting to insert recipe with data:', { ...recipeData, slug })
+    // Prepare the data for insertion, mapping 'instructions' to 'instruction'
+    const dataToInsert = {
+      ...recipeData,
+      instruction: recipeData.instructions, // Map instructions to instruction
+      slug,
+    }
+    // Remove the original instructions field as it's not in the database schema
+    delete (dataToInsert as any).instructions
+
+    // Insert the recipe into the database
+    console.log('Attempting to insert recipe with data:', dataToInsert)
     const { data, error } = await supabase
       .from('recipes')
-      .insert([{ ...recipeData, slug }])
+      .insert([dataToInsert])
       .select()
       .single()
 
