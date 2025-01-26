@@ -1,62 +1,54 @@
 import { useParams } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { useQuery } from "@tanstack/react-query";
+import { toast } from "@/components/ui/use-toast";
 
-// Données temporaires (à remplacer par une vraie source de données plus tard)
-const recettes = {
-  "1": {
-    id: "1",
-    title: "Curry de Pois Chiches",
-    description: "Un plat réconfortant aux saveurs indiennes, parfait pour les soirées d'hiver. Ce curry végétalien est riche en protéines et en saveurs.",
-    prepTime: "30 min",
-    image: "https://images.unsplash.com/photo-1582562124811-c09040d0a901",
-    ingredients: [
-      "400g de pois chiches cuits",
-      "1 oignon",
-      "2 gousses d'ail",
-      "400ml de lait de coco",
-      "2 c. à soupe de curry en poudre",
-      "1 c. à café de curcuma",
-      "Sel et poivre"
-    ],
-    instructions: [
-      "Émincez l'oignon et l'ail",
-      "Faites revenir l'oignon dans une poêle avec un peu d'huile",
-      "Ajoutez l'ail et les épices",
-      "Versez le lait de coco et les pois chiches",
-      "Laissez mijoter 15-20 minutes"
-    ]
-  },
-  "2": {
-    id: "2",
-    title: "Bowl Buddha Coloré",
-    description: "Un repas équilibré et nutritif qui combine des légumes crus et cuits, des protéines végétales et des céréales complètes.",
-    prepTime: "25 min",
-    image: "https://images.unsplash.com/photo-1721322800607-8c38375eef04",
-    ingredients: [
-      "100g de quinoa",
-      "1 avocat",
-      "100g de pois chiches rôtis",
-      "1 carotte râpée",
-      "Quelques feuilles d'épinards",
-      "Graines de sésame",
-      "Sauce tahini"
-    ],
-    instructions: [
-      "Cuisez le quinoa selon les instructions",
-      "Préparez tous les légumes",
-      "Disposez harmonieusement les ingrédients dans un bol",
-      "Ajoutez la sauce tahini et les graines",
-      "Servez immédiatement"
-    ]
+interface Recipe {
+  id: string;
+  title: string;
+  description: string;
+  prep_time: string;
+  image_url: string;
+  ingredients: string[];
+  instructions: string[];
+  anecdote?: string;
+}
+
+const fetchRecipe = async (id: string): Promise<Recipe> => {
+  const response = await fetch(`${import.meta.env.VITE_API_URL}/recipes/${id}`);
+  if (!response.ok) {
+    throw new Error("Recette non trouvée");
   }
+  return response.json();
 };
 
 const RecettePage = () => {
   const { id } = useParams();
-  const recette = recettes[id as keyof typeof recettes];
+  
+  const { data: recette, isLoading, error } = useQuery({
+    queryKey: ["recipe", id],
+    queryFn: () => fetchRecipe(id as string),
+  });
 
-  if (!recette) {
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-sage/20">
+        <Header />
+        <main className="container mx-auto px-4 py-8">
+          <div className="text-center">Chargement...</div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (error) {
+    toast({
+      title: "Erreur",
+      description: "Impossible de charger la recette",
+      variant: "destructive",
+    });
     return (
       <div className="min-h-screen bg-sage/20">
         <Header />
@@ -70,6 +62,8 @@ const RecettePage = () => {
     );
   }
 
+  if (!recette) return null;
+
   return (
     <div className="min-h-screen bg-sage/20">
       <Header />
@@ -77,7 +71,7 @@ const RecettePage = () => {
         <article className="max-w-4xl mx-auto bg-white rounded-lg shadow-sm overflow-hidden">
           <div className="aspect-video w-full">
             <img
-              src={recette.image}
+              src={recette.image_url}
               alt={recette.title}
               className="w-full h-full object-cover"
             />
@@ -90,8 +84,15 @@ const RecettePage = () => {
               {recette.description}
             </p>
             <div className="flex items-center gap-2 text-sm text-neutral mb-6">
-              <span>Temps de préparation : {recette.prepTime}</span>
+              <span>Temps de préparation : {recette.prep_time}</span>
             </div>
+            
+            {recette.anecdote && (
+              <div className="mb-8 p-4 bg-sage/10 rounded-lg">
+                <h2 className="font-outfit font-medium text-xl mb-2">Le saviez-vous ?</h2>
+                <p className="text-neutral-600">{recette.anecdote}</p>
+              </div>
+            )}
             
             <div className="grid md:grid-cols-2 gap-8">
               <section>
