@@ -1,5 +1,11 @@
+import { createClient } from '@supabase/supabase-js'
+import "https://deno.land/x/xhr@0.1.0/mod.ts"
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.7.1'
+
+const supabaseUrl = Deno.env.get('SUPABASE_URL')!
+const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+
+const supabase = createClient(supabaseUrl, supabaseServiceKey)
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -35,18 +41,17 @@ serve(async (req) => {
   }
 
   try {
-    const supabase = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
-    )
-
+    console.log('Receiving request...')
+    
     // Parse the request body
     const recipeData: RecipePayload = await req.json()
+    console.log('Received recipe data:', recipeData)
 
     // Validate required fields
     const requiredFields = ['nom_recette', 'time_preparation', 'image', 'ingredients', 'instruction']
     for (const field of requiredFields) {
       if (!recipeData[field as keyof RecipePayload]) {
+        console.log(`Missing required field: ${field}`)
         return new Response(
           JSON.stringify({ error: `Missing required field: ${field}` }),
           { 
@@ -64,9 +69,11 @@ serve(async (req) => {
     
     // Generate the complete slug
     const baseSlug = generateSlug(recipeData.nom_recette)
-    const slug = `${baseSlug}`
+    const slug = `${year}/${month}/${baseSlug}`
+    console.log('Generated slug:', slug)
 
     // Insert the recipe into the database with the generated slug
+    console.log('Attempting to insert recipe with data:', { ...recipeData, slug })
     const { data, error } = await supabase
       .from('recipes')
       .insert([{ ...recipeData, slug }])
@@ -85,7 +92,6 @@ serve(async (req) => {
     }
 
     console.log('Recipe created successfully:', data)
-
     return new Response(
       JSON.stringify({ success: true, data }),
       { 
