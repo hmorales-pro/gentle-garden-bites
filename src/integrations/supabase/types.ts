@@ -9,6 +9,96 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      carousel_images: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          image_url: string
+          link: string | null
+          order_index: number
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url: string
+          link?: string | null
+          order_index: number
+          title: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string
+          link?: string | null
+          order_index?: number
+          title?: string
+        }
+        Relationships: []
+      }
+      categories: {
+        Row: {
+          created_at: string
+          description: string | null
+          icon: string | null
+          id: string
+          name: string
+          slug: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          name: string
+          slug: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          name?: string
+          slug?: string
+        }
+        Relationships: []
+      }
+      events: {
+        Row: {
+          created_at: string
+          date: string
+          description: string
+          id: string
+          image: string | null
+          link: string | null
+          location: string
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          date: string
+          description: string
+          id?: string
+          image?: string | null
+          link?: string | null
+          location: string
+          title: string
+        }
+        Update: {
+          created_at?: string
+          date?: string
+          description?: string
+          id?: string
+          image?: string | null
+          link?: string | null
+          location?: string
+          title?: string
+        }
+        Relationships: []
+      }
       recipes: {
         Row: {
           anecdote: string | null
@@ -48,6 +138,30 @@ export type Database = {
           slug?: string
           story?: string | null
           time_preparation?: string
+        }
+        Relationships: []
+      }
+      tips: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          image: string | null
+          title: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          image?: string | null
+          title: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          image?: string | null
+          title?: string
         }
         Relationships: []
       }
