@@ -7,11 +7,17 @@ interface RecipeCardProps {
   image: string;
   prepTime: string;
   description: string;
+  slug: string;
+  createdAt: string;
 }
 
-export const RecipeCard = ({ id, title, image, prepTime, description }: RecipeCardProps) => {
+export const RecipeCard = ({ title, image, prepTime, description, slug, createdAt }: RecipeCardProps) => {
+  const date = new Date(createdAt);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+
   return (
-    <Link to={`/recette/${id}`} className="group">
+    <Link to={`/recette/${year}/${month}/${slug}`} className="group">
       <article className="bg-white rounded-lg shadow-sm overflow-hidden transition-transform duration-300 hover:-translate-y-1">
         <div className="aspect-video overflow-hidden">
           <img

@@ -13,10 +13,12 @@ interface Recipe {
   ingredients: string[];
   instructions: string[];
   anecdote?: string;
+  slug: string;
+  created_at: string;
 }
 
-const fetchRecipe = async (id: string): Promise<Recipe> => {
-  const response = await fetch(`${import.meta.env.VITE_API_URL}/recipes/${id}`);
+const fetchRecipe = async (year: string, month: string, slug: string): Promise<Recipe> => {
+  const response = await fetch(`${import.meta.env.VITE_API_URL}/recipes/${year}/${month}/${slug}`);
   if (!response.ok) {
     throw new Error("Recette non trouvée");
   }
@@ -24,11 +26,11 @@ const fetchRecipe = async (id: string): Promise<Recipe> => {
 };
 
 const RecettePage = () => {
-  const { id } = useParams();
+  const { year, month, slug } = useParams();
   
   const { data: recette, isLoading, error } = useQuery({
-    queryKey: ["recipe", id],
-    queryFn: () => fetchRecipe(id as string),
+    queryKey: ["recipe", year, month, slug],
+    queryFn: () => fetchRecipe(year!, month!, slug!),
   });
 
   if (isLoading) {

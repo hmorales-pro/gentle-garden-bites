@@ -20,7 +20,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/recettes" element={<Recettes />} />
           <Route path="/about" element={<About />} />
-          <Route path="/recette/:id" element={<RecettePage />} />
+          <Route path="/recette/:year/:month/:slug" element={<RecettePage />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
