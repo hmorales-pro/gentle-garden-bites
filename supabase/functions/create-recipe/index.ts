@@ -99,15 +99,9 @@ serve(async (req) => {
         console.log('Failed to generate image, continuing without image')
       }
     }
-
-    // Generate date-based path components
-    const now = new Date()
-    const year = now.getFullYear()
-    const month = String(now.getMonth() + 1).padStart(2, '0')
     
-    // Generate the complete slug
-    const baseSlug = generateSlug(recipeData.nom_recette)
-    const slug = `${year}/${month}/${baseSlug}`
+    // Generate the slug from just the recipe name
+    const slug = generateSlug(recipeData.nom_recette)
     console.log('Generated slug:', slug)
 
     // Prepare the data for insertion, mapping 'instructions' to 'instruction'
