@@ -3,6 +3,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "@/components/ui/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface Recipe {
   id: string;
@@ -18,11 +19,22 @@ interface Recipe {
 }
 
 const fetchRecipe = async (year: string, month: string, slug: string): Promise<Recipe> => {
-  const response = await fetch(`${import.meta.env.VITE_API_URL}/recipes/${year}/${month}/${slug}`);
-  if (!response.ok) {
+  const { data, error } = await supabase
+    .from('recipes')
+    .select('*')
+    .eq('slug', slug)
+    .single();
+
+  if (error) {
+    console.error('Error fetching recipe:', error);
     throw new Error("Recette non trouvée");
   }
-  return response.json();
+
+  if (!data) {
+    throw new Error("Recette non trouvée");
+  }
+
+  return data;
 };
 
 const RecettePage = () => {
