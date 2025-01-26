@@ -1,24 +1,27 @@
+import { useQuery } from "@tanstack/react-query";
 import { RecipeCard } from "./RecipeCard";
+import { supabase } from "@/integrations/supabase/client";
+
+const fetchLatestRecipes = async () => {
+  const { data, error } = await supabase
+    .from('recipes')
+    .select('*')
+    .order('created_at', { ascending: false })
+    .limit(3);
+
+  if (error) {
+    console.error('Error fetching recipes:', error);
+    throw error;
+  }
+
+  return data;
+};
 
 export const FeaturedRecipes = () => {
-  const featuredRecipes = [
-    {
-      id: "1",
-      nom_recette: "Curry de Pois Chiches",
-      time_preparation: "30 min",
-      image: "https://images.unsplash.com/photo-1582562124811-c09040d0a901",
-      slug: "curry-de-pois-chiches",
-      created_at: "2024-02-15T12:00:00Z"
-    },
-    {
-      id: "2",
-      nom_recette: "Bowl Buddha Coloré",
-      time_preparation: "25 min",
-      image: "https://images.unsplash.com/photo-1721322800607-8c38375eef04",
-      slug: "bowl-buddha-colore",
-      created_at: "2024-02-14T12:00:00Z"
-    }
-  ];
+  const { data: recipes, isLoading, error } = useQuery({
+    queryKey: ['featured-recipes'],
+    queryFn: fetchLatestRecipes,
+  });
 
   return (
     <section className="py-16">
@@ -26,11 +29,23 @@ export const FeaturedRecipes = () => {
         <h2 className="font-outfit font-semibold text-3xl md:text-4xl mb-8 text-center">
           Recettes du Moment
         </h2>
-        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-          {featuredRecipes.map((recipe) => (
-            <RecipeCard key={recipe.id} {...recipe} />
-          ))}
-        </div>
+        {isLoading && (
+          <p className="text-center text-neutral-600">
+            Chargement des recettes...
+          </p>
+        )}
+        {error && (
+          <p className="text-center text-red-600">
+            Une erreur est survenue lors du chargement des recettes.
+          </p>
+        )}
+        {recipes && (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            {recipes.map((recipe) => (
+              <RecipeCard key={recipe.id} {...recipe} />
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );
