@@ -17,57 +17,48 @@ const About = () => {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8 mb-12">
-            <div className="space-y-6">
-              <div>
-                <h2 className="font-outfit font-medium text-2xl mb-4">Mon Histoire</h2>
-                <p className="text-neutral-600 leading-relaxed">
-                  Passionnée de cuisine depuis mon plus jeune âge, j'ai décidé de me lancer dans l'aventure 
-                  du véganisme il y a maintenant 5 ans. Ce changement de vie a transformé ma façon de voir 
-                  la cuisine et m'a poussée à être plus créative dans mes recettes.
-                </p>
-              </div>
-              
-              <div>
-                <h2 className="font-outfit font-medium text-2xl mb-4">Ma Philosophie</h2>
-                <p className="text-neutral-600 leading-relaxed">
-                  Je crois fermement qu'une cuisine éthique peut être délicieuse, accessible et conviviale. 
-                  Mon objectif est de démystifier la cuisine végane et de montrer qu'elle peut être 
-                  savoureuse, nutritive et adaptée à tous les budgets.
-                </p>
-              </div>
+          <div className="prose prose-lg max-w-none mb-12">
+            <p className="text-xl font-medium text-neutral-800 mb-6">
+              Bienvenue sur mon petit coin de paradis végan !
+            </p>
+
+            <p>
+              Salut, moi c'est Jade, jeune cheffe (enfin, j'essaye !) de 25 ans, passionnée de cuisine depuis que je suis toute petite. Je suis récemment devenue végan, et autant vous dire que ce virage n'a pas été une mince affaire. Certains de mes amis m'ont regardée comme si j'avais décidé de m'inscrire à la NASA sur un coup de tête ("Quoi ? Tu ne manges plus de fromage ?!"), et ma famille a cru que j'étais tombée sur la tête ("On ne va plus jamais pouvoir t'inviter le dimanche midi ?!").
+            </p>
+
+            <p>
+              Malgré toutes ces réactions (parfois très drôles, parfois un peu vexantes), je ne regrette pas d'avoir choisi cette voie. Pourquoi ? Pour plein de raisons : d'abord pour le bien-être animal (eh oui, j'ai un petit côté Brigitte Bardot en moi), ensuite pour l'environnement, et enfin pour me lancer des défis culinaires. Parce que si vous croyez que manger végan signifie se contenter d'une feuille de salade et d'un tofu fade, laissez-moi vous prouver le contraire ! Cuisiner végane, c'est l'occasion de découvrir de nouvelles saveurs, de réinventer des plats traditionnels et de s'amuser en cuisine sans faire de mal à personne.
+            </p>
+
+            <div className="bg-sage/40 p-6 rounded-lg my-8">
+              <p className="text-lg font-medium italic">
+                "Mon plus grand bonheur, c'est quand mes amis croquent dans mes burgers végans, lèvent un sourcil étonné, puis finissent par dire : Franchement, c'est super bon… Je vais peut-être goûter à tes trucs plus souvent !"
+              </p>
             </div>
 
-            <div className="relative rounded-2xl overflow-hidden h-[400px]">
-              <img 
-                src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158"
-                alt="Jade dans sa cuisine"
-                className="object-cover w-full h-full"
-              />
-            </div>
-          </div>
+            <p>
+              Au début, je me suis sentie un peu à part. Quand vous débarquez à un barbecue entre potes avec votre steak de soja, on vous juge souvent comme étant "la relou de service". Mais aujourd'hui, j'en ris beaucoup et ça me motive encore plus à créer des recettes qui mettent tout le monde d'accord.
+            </p>
 
-          <div className="bg-cream/50 rounded-2xl p-8 mb-12">
-            <h2 className="font-outfit font-medium text-2xl mb-6 text-center">Ce Que Vous Trouverez Ici</h2>
-            <div className="grid md:grid-cols-3 gap-6">
-              <div className="text-center">
-                <h3 className="font-outfit font-medium text-xl mb-2">Recettes Simples</h3>
-                <p className="text-neutral-600">
-                  Des recettes faciles à suivre avec des ingrédients du quotidien
-                </p>
-              </div>
-              <div className="text-center">
-                <h3 className="font-outfit font-medium text-xl mb-2">Conseils Pratiques</h3>
-                <p className="text-neutral-600">
-                  Des astuces pour réussir vos plats et optimiser votre temps en cuisine
-                </p>
-              </div>
-              <div className="text-center">
-                <h3 className="font-outfit font-medium text-xl mb-2">Inspiration</h3>
-                <p className="text-neutral-600">
-                  Des idées créatives pour varier vos menus et découvrir de nouvelles saveurs
-                </p>
-              </div>
+            <h2 className="font-outfit font-medium text-2xl mt-12 mb-6">Mes Projets & Ambitions</h2>
+            
+            <p>
+              Sur ce blog, vous trouverez donc mes expériences culinaires (parfois un brin ratées, mais je partage aussi mes plantages, promis !) et mes inspirations végétales. Mon objectif ? Vous montrer que manger végan peut être simple, gourmand et fun.
+            </p>
+
+            <p>
+              Mes envies pour les prochains mois et années ? Continuer de développer ce blog, proposer des ateliers de cuisine végan en ligne (et pourquoi pas en présentiel !), et surtout garder ma bonne humeur pour prouver que l'on peut être sérieux sur le fond (la cause animale, l'écologie) tout en gardant le sourire et un brin d'autodérision.
+            </p>
+
+            <p>
+              À moyen terme, j'aimerais aussi travailler sur un livre de recettes végan et, à plus long terme… qui sait ? Peut-être ouvrir mon propre petit resto végan, un lieu convivial où on mange bien, on rit beaucoup, et on se sent tous un peu chez soi !
+            </p>
+
+            <div className="bg-cream/50 rounded-2xl p-8 my-12">
+              <h2 className="font-outfit font-medium text-2xl mb-6 text-center">Ma Philosophie</h2>
+              <p className="text-center text-lg mb-0">
+                L'essentiel est de se régaler sans complexe et sans cruauté. Alors, on se lance ?
+              </p>
             </div>
           </div>
 
