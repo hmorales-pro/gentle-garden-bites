@@ -18,7 +18,7 @@ interface RecipePayload {
   time_preparation: string
   image?: string
   ingredients: string[]
-  instructions: string[] // Changed from instruction to instructions to match incoming data
+  instructions: string[]
   anecdote?: string
   story?: string
   astuce?: string
@@ -107,7 +107,7 @@ serve(async (req) => {
     // Prepare the data for insertion, mapping 'instructions' to 'instruction'
     const dataToInsert = {
       ...recipeData,
-      instruction: recipeData.instructions, // Map instructions to instruction
+      instruction: recipeData.instructions,
       slug,
     }
     // Remove the original instructions field as it's not in the database schema
@@ -132,9 +132,19 @@ serve(async (req) => {
       )
     }
 
+    // Generate the complete URL for the recipe
+    const now = new Date()
+    const year = now.getFullYear()
+    const month = String(now.getMonth() + 1).padStart(2, '0')
+    const recipeUrl = `/recette/${year}/${month}/${slug}`
+
     console.log('Recipe created successfully:', data)
     return new Response(
-      JSON.stringify({ success: true, data }),
+      JSON.stringify({ 
+        success: true, 
+        data,
+        url: recipeUrl 
+      }),
       { 
         status: 200,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
