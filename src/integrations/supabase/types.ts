@@ -103,6 +103,7 @@ export type Database = {
         Row: {
           anecdote: string | null
           astuce: string | null
+          category_id: string | null
           created_at: string
           id: string
           image: string
@@ -116,6 +117,7 @@ export type Database = {
         Insert: {
           anecdote?: string | null
           astuce?: string | null
+          category_id?: string | null
           created_at?: string
           id?: string
           image: string
@@ -129,6 +131,7 @@ export type Database = {
         Update: {
           anecdote?: string | null
           astuce?: string | null
+          category_id?: string | null
           created_at?: string
           id?: string
           image?: string
@@ -139,7 +142,15 @@ export type Database = {
           story?: string | null
           time_preparation?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "recipes_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       tips: {
         Row: {
