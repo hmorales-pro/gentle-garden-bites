@@ -1,4 +1,4 @@
-import { Menu } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -36,31 +36,40 @@ export const Header = () => {
           </div>
 
           {isMenuOpen && (
-            <div className="fixed inset-0 bg-white z-40 md:hidden">
-              <div className="pt-20 px-4">
-                <nav className="flex flex-col space-y-4">
-                  <Link 
-                    to="/" 
-                    className="text-neutral-600 hover:text-neutral-800 transition-colors"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    Accueil
-                  </Link>
-                  <Link 
-                    to="/recettes" 
-                    className="text-neutral-600 hover:text-neutral-800 transition-colors"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    Recettes
-                  </Link>
-                  <Link 
-                    to="/about" 
-                    className="text-neutral-600 hover:text-neutral-800 transition-colors"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    À Propos
-                  </Link>
-                </nav>
+            <div className="fixed inset-0 bg-sage/95 backdrop-blur-sm z-40 md:hidden">
+              <div className="relative h-full">
+                <button
+                  onClick={() => setIsMenuOpen(false)}
+                  className="absolute top-4 right-4 p-2"
+                  aria-label="Fermer le menu"
+                >
+                  <X className="h-6 w-6 text-neutral-800" />
+                </button>
+                <div className="flex flex-col justify-center h-full px-4">
+                  <nav className="flex flex-col space-y-8">
+                    <Link 
+                      to="/" 
+                      className="text-2xl text-neutral-800 hover:text-neutral-600 transition-colors text-center"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      Accueil
+                    </Link>
+                    <Link 
+                      to="/recettes" 
+                      className="text-2xl text-neutral-800 hover:text-neutral-600 transition-colors text-center"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      Recettes
+                    </Link>
+                    <Link 
+                      to="/about" 
+                      className="text-2xl text-neutral-800 hover:text-neutral-600 transition-colors text-center"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      À Propos
+                    </Link>
+                  </nav>
+                </div>
               </div>
             </div>
           )}
