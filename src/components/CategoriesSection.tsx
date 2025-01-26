@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Link } from "react-router-dom";
-import { Grid } from "lucide-react";
+import { Utensils, Cake, Soup, Salad, Cookie } from "lucide-react";
 
 const fetchCategories = async () => {
   const { data, error } = await supabase
@@ -11,6 +11,23 @@ const fetchCategories = async () => {
 
   if (error) throw error;
   return data;
+};
+
+const getCategoryIcon = (slug: string) => {
+  switch (slug) {
+    case 'plats-principaux':
+      return <Utensils className="w-12 h-12 mb-3 text-neutral" />;
+    case 'desserts':
+      return <Cake className="w-12 h-12 mb-3 text-neutral" />;
+    case 'soupes':
+      return <Soup className="w-12 h-12 mb-3 text-neutral" />;
+    case 'salades':
+      return <Salad className="w-12 h-12 mb-3 text-neutral" />;
+    case 'aperitifs':
+      return <Cookie className="w-12 h-12 mb-3 text-neutral" />;
+    default:
+      return <Utensils className="w-12 h-12 mb-3 text-neutral" />;
+  }
 };
 
 export const CategoriesSection = () => {
@@ -40,15 +57,7 @@ export const CategoriesSection = () => {
                 className="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow group"
               >
                 <div className="flex flex-col items-center text-center">
-                  {category.icon ? (
-                    <img
-                      src={category.icon}
-                      alt={category.name}
-                      className="w-12 h-12 mb-3"
-                    />
-                  ) : (
-                    <Grid className="w-12 h-12 mb-3 text-neutral" />
-                  )}
+                  {getCategoryIcon(category.slug)}
                   <h3 className="font-medium text-lg group-hover:text-neutral transition-colors">
                     {category.name}
                   </h3>
