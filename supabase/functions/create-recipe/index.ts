@@ -30,11 +30,16 @@ async function generateImage(recipeName: string): Promise<string | null> {
     console.log('Generating image for recipe:', recipeName)
     const hf = new HfInference(Deno.env.get('HUGGING_FACE'))
     
-    const prompt = `A professional food photography of ${recipeName}, high quality, realistic, appetizing, on a beautiful plate, restaurant quality, soft lighting`
+    const prompt = `A professional food photography of ${recipeName}, high quality, realistic, appetizing, on a beautiful plate, restaurant quality, soft lighting, 4k, detailed`
+    
+    console.log('Using prompt:', prompt)
     
     const image = await hf.textToImage({
       inputs: prompt,
-      model: 'black-forest-labs/FLUX.1-schnell',
+      model: 'stabilityai/stable-diffusion-2-1',
+      parameters: {
+        negative_prompt: "watermark, text, bad quality, blurry, cartoon",
+      }
     })
 
     // Convert the blob to a base64 string
