@@ -34,14 +34,16 @@ export const HomeCarousel = () => {
             {images?.map((image) => (
               <CarouselItem key={image.id}>
                 <div className="relative aspect-[16/9]">
-                  <img
-                    src={image.image_url}
-                    alt={image.title}
-                    className="w-full h-full object-cover rounded-lg"
-                  />
+                  {image.image_url && (
+                    <img
+                      src={image.image_url.startsWith('http') ? image.image_url : `${image.image_url}`}
+                      alt={image.title || 'Carousel image'}
+                      className="w-full h-full object-cover rounded-lg"
+                    />
+                  )}
                   {(image.title || image.description) && (
                     <div className="absolute bottom-0 left-0 right-0 bg-black/50 p-4 text-white rounded-b-lg">
-                      <h3 className="text-xl font-medium">{image.title}</h3>
+                      {image.title && <h3 className="text-xl font-medium">{image.title}</h3>}
                       {image.description && (
                         <p className="mt-2 text-sm">{image.description}</p>
                       )}

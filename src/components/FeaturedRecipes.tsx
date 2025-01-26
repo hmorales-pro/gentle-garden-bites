@@ -42,7 +42,11 @@ export const FeaturedRecipes = () => {
         {recipes && (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {recipes.map((recipe) => (
-              <RecipeCard key={recipe.id} {...recipe} />
+              <RecipeCard 
+                key={recipe.id} 
+                {...recipe} 
+                image={recipe.image?.startsWith('http') ? recipe.image : `${recipe.image}`}
+              />
             ))}
           </div>
         )}

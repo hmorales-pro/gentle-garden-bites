@@ -40,7 +40,7 @@ export const TipsSection = () => {
                 <p className="text-neutral-600">{tip.content}</p>
                 {tip.image && (
                   <img
-                    src={tip.image}
+                    src={tip.image.startsWith('http') ? tip.image : `${tip.image}`}
                     alt={tip.title}
                     className="mt-4 rounded-lg w-full h-32 object-cover"
                   />
