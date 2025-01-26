@@ -7,14 +7,18 @@ export const FeaturedRecipes = () => {
       title: "Curry de Pois Chiches",
       description: "Un plat réconfortant aux saveurs indiennes",
       prepTime: "30 min",
-      image: "https://images.unsplash.com/photo-1582562124811-c09040d0a901"
+      image: "https://images.unsplash.com/photo-1582562124811-c09040d0a901",
+      slug: "curry-de-pois-chiches",
+      createdAt: "2024-02-15T12:00:00Z"
     },
     {
       id: "2",
       title: "Bowl Buddha Coloré",
       description: "Un repas équilibré et nutritif",
       prepTime: "25 min",
-      image: "https://images.unsplash.com/photo-1721322800607-8c38375eef04"
+      image: "https://images.unsplash.com/photo-1721322800607-8c38375eef04",
+      slug: "bowl-buddha-colore",
+      createdAt: "2024-02-14T12:00:00Z"
     }
   ];
 
