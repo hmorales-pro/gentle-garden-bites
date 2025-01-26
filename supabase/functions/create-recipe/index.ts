@@ -16,7 +16,16 @@ interface RecipePayload {
   story?: string
   astuce?: string
   category_id?: string
-  slug: string
+}
+
+function generateSlug(title: string): string {
+  return title
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '') // Remove accents
+    .replace(/[^a-z0-9]+/g, '-')     // Replace special chars with hyphens
+    .replace(/^-+|-+$/g, '')         // Remove leading/trailing hyphens
+    .substring(0, 100);              // Limit length
 }
 
 serve(async (req) => {
@@ -35,7 +44,7 @@ serve(async (req) => {
     const recipeData: RecipePayload = await req.json()
 
     // Validate required fields
-    const requiredFields = ['nom_recette', 'time_preparation', 'image', 'ingredients', 'instruction', 'slug']
+    const requiredFields = ['nom_recette', 'time_preparation', 'image', 'ingredients', 'instruction']
     for (const field of requiredFields) {
       if (!recipeData[field as keyof RecipePayload]) {
         return new Response(
@@ -48,10 +57,19 @@ serve(async (req) => {
       }
     }
 
-    // Insert the recipe into the database
+    // Generate date-based path components
+    const now = new Date()
+    const year = now.getFullYear()
+    const month = String(now.getMonth() + 1).padStart(2, '0')
+    
+    // Generate the complete slug
+    const baseSlug = generateSlug(recipeData.nom_recette)
+    const slug = `${baseSlug}`
+
+    // Insert the recipe into the database with the generated slug
     const { data, error } = await supabase
       .from('recipes')
-      .insert([recipeData])
+      .insert([{ ...recipeData, slug }])
       .select()
       .single()
 
