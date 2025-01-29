@@ -18,8 +18,8 @@ interface RecipeInput {
     nom_recette: string
     time_preparation: string
     ingredients: string[]
-    instructions?: string[] // Champ optionnel pour la compatibilité
-    instruction?: string[] // Champ de la base de données
+    instructions?: string[]
+    instruction?: string[]
     anecdote?: string
     story?: string
     astuce?: string
@@ -64,14 +64,15 @@ function generateSlug(title: string): string {
   return title
     .toLowerCase()
     .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '') // Remove accents
-    .replace(/[^a-z0-9]+/g, '-')     // Replace special chars with hyphens
-    .replace(/^-+|-+$/g, '')         // Remove leading/trailing hyphens
-    .substring(0, 100);              // Limit length
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .substring(0, 100);
 }
 
 async function getCategoryId(slug: string): Promise<string | null> {
   try {
+    console.log('Looking up category ID for slug:', slug)
     const { data, error } = await supabase
       .from('categories')
       .select('id')
@@ -83,7 +84,13 @@ async function getCategoryId(slug: string): Promise<string | null> {
       return null
     }
 
-    return data?.id || null
+    if (!data) {
+      console.error('No category found for slug:', slug)
+      return null
+    }
+
+    console.log('Found category ID:', data.id, 'for slug:', slug)
+    return data.id
   } catch (error) {
     console.error('Error in getCategoryId:', error)
     return null
@@ -103,7 +110,6 @@ serve(async (req) => {
 
     const recipeData = inputData.result
     
-    // Validation des champs requis
     const requiredFields = ['nom_recette', 'time_preparation', 'ingredients']
     for (const field of requiredFields) {
       if (!recipeData[field as keyof typeof recipeData]) {
@@ -118,7 +124,7 @@ serve(async (req) => {
       }
     }
 
-    // Gérer la catégorie via le slug si fourni
+    // Handle category_slug
     if (recipeData.category_slug && !recipeData.category_id) {
       console.log('Looking up category ID for slug:', recipeData.category_slug)
       const categoryId = await getCategoryId(recipeData.category_slug)
@@ -127,11 +133,17 @@ serve(async (req) => {
         console.log('Found category ID:', categoryId)
       } else {
         console.log('Category not found for slug:', recipeData.category_slug)
+        return new Response(
+          JSON.stringify({ error: `Category not found for slug: ${recipeData.category_slug}` }),
+          { 
+            status: 400,
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+          }
+        )
       }
       delete recipeData.category_slug
     }
 
-    // Use provided image or generate one
     let imageUrl = inputData.image
     if (!imageUrl) {
       console.log('No image provided, attempting to generate one...')
@@ -144,24 +156,20 @@ serve(async (req) => {
       }
     }
     
-    // Generate the slug from the recipe name
     const slug = generateSlug(recipeData.nom_recette)
     console.log('Generated slug:', slug)
 
-    // Prepare the data for insertion
     const dataToInsert = {
       ...recipeData,
-      instruction: recipeData.instructions || recipeData.instruction, // Utilise instructions s'il existe, sinon instruction
+      instruction: recipeData.instructions || recipeData.instruction,
       image: imageUrl,
       slug,
     }
 
-    // Remove the instructions field as it's not in the database schema
     if ('instructions' in dataToInsert) {
       delete dataToInsert.instructions;
     }
 
-    // Insert the recipe into the database
     console.log('Attempting to insert recipe with data:', dataToInsert)
     const { data, error } = await supabase
       .from('recipes')
@@ -180,7 +188,6 @@ serve(async (req) => {
       )
     }
 
-    // Generate the complete URL for the recipe
     const now = new Date()
     const year = now.getFullYear()
     const month = String(now.getMonth() + 1).padStart(2, '0')
