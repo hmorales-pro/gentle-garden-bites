@@ -21,16 +21,16 @@ const fetchCategories = async () => {
 
 const getCategoryIcon = (slug: string) => {
   switch (slug) {
-    case 'plats-principaux':
+    case 'plats':
       return <Utensils className="w-12 h-12 mb-3 text-neutral" />;
     case 'desserts':
       return <Cake className="w-12 h-12 mb-3 text-neutral" />;
-    case 'soupes':
+    case 'entrees':
       return <Soup className="w-12 h-12 mb-3 text-neutral" />;
-    case 'salades':
-      return <Salad className="w-12 h-12 mb-3 text-neutral" />;
-    case 'aperitifs':
+    case 'snacks':
       return <Cookie className="w-12 h-12 mb-3 text-neutral" />;
+    case 'petit-dejeuner':
+      return <Salad className="w-12 h-12 mb-3 text-neutral" />;
     default:
       return <Utensils className="w-12 h-12 mb-3 text-neutral" />;
   }

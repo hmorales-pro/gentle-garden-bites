@@ -8,16 +8,16 @@ import { Utensils, Cake, Soup, Salad, Cookie } from "lucide-react";
 
 const getCategoryIcon = (slug: string) => {
   switch (slug) {
-    case 'plats-principaux':
+    case 'plats':
       return <Utensils className="w-6 h-6 text-neutral" />;
     case 'desserts':
       return <Cake className="w-6 h-6 text-neutral" />;
-    case 'soupes':
+    case 'entrees':
       return <Soup className="w-6 h-6 text-neutral" />;
-    case 'salades':
-      return <Salad className="w-6 h-6 text-neutral" />;
-    case 'aperitifs':
+    case 'snacks':
       return <Cookie className="w-6 h-6 text-neutral" />;
+    case 'petit-dejeuner':
+      return <Salad className="w-6 h-6 text-neutral" />;
     default:
       return <Utensils className="w-6 h-6 text-neutral" />;
   }
