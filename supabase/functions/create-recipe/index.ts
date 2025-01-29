@@ -23,6 +23,7 @@ interface RecipeInput {
     story?: string
     astuce?: string
     category_id?: string
+    category_slug?: string // Nouveau champ optionnel pour le slug de la catégorie
   }
   image?: string
 }
@@ -33,18 +34,19 @@ async function generateImage(recipeName: string): Promise<string | null> {
     const hf = new HfInference(Deno.env.get('HUGGING_FACE'))
     
     const prompt = `A professional food photography of ${recipeName}, high quality, realistic, appetizing, on a beautiful plate, restaurant quality, soft lighting, 4k, detailed`
+    const negative_prompt = "watermark, text, bad quality, blurry, cartoon"
     
     console.log('Using prompt:', prompt)
+    console.log('Using negative prompt:', negative_prompt)
     
     const image = await hf.textToImage({
       inputs: prompt,
       model: 'stabilityai/stable-diffusion-2-1',
       parameters: {
-        negative_prompt: "watermark, text, bad quality, blurry, cartoon",
+        negative_prompt: negative_prompt
       }
     })
 
-    // Convert the blob to a base64 string
     const arrayBuffer = await image.arrayBuffer()
     const base64 = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)))
     const dataUrl = `data:image/png;base64,${base64}`
@@ -65,6 +67,26 @@ function generateSlug(title: string): string {
     .replace(/[^a-z0-9]+/g, '-')     // Replace special chars with hyphens
     .replace(/^-+|-+$/g, '')         // Remove leading/trailing hyphens
     .substring(0, 100);              // Limit length
+}
+
+async function getCategoryId(slug: string): Promise<string | null> {
+  try {
+    const { data, error } = await supabase
+      .from('categories')
+      .select('id')
+      .eq('slug', slug)
+      .single()
+
+    if (error) {
+      console.error('Error fetching category:', error)
+      return null
+    }
+
+    return data?.id || null
+  } catch (error) {
+    console.error('Error in getCategoryId:', error)
+    return null
+  }
 }
 
 serve(async (req) => {
@@ -95,6 +117,20 @@ serve(async (req) => {
           }
         )
       }
+    }
+
+    // Gérer la catégorie via le slug si fourni
+    if (recipeData.category_slug && !recipeData.category_id) {
+      console.log('Looking up category ID for slug:', recipeData.category_slug)
+      const categoryId = await getCategoryId(recipeData.category_slug)
+      if (categoryId) {
+        recipeData.category_id = categoryId
+        console.log('Found category ID:', categoryId)
+      } else {
+        console.log('Category not found for slug:', recipeData.category_slug)
+      }
+      // Supprimer le slug de la catégorie car il n'existe pas dans le schéma de la table
+      delete recipeData.category_slug
     }
 
     // Use provided image or generate one
