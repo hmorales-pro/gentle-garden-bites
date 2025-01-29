@@ -4,12 +4,18 @@ import { Link } from "react-router-dom";
 import { Utensils, Cake, Soup, Salad, Cookie } from "lucide-react";
 
 const fetchCategories = async () => {
+  console.log('Fetching categories...');
   const { data, error } = await supabase
     .from('categories')
     .select('*')
     .order('name', { ascending: true });
 
-  if (error) throw error;
+  if (error) {
+    console.error('Error fetching categories:', error);
+    throw error;
+  }
+  
+  console.log('Categories fetched:', data);
   return data;
 };
 

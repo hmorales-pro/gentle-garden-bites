@@ -24,19 +24,26 @@ const getCategoryIcon = (slug: string) => {
 };
 
 const fetchCategories = async () => {
+  console.log('Fetching categories in Recettes page...');
   const { data, error } = await supabase
     .from('categories')
     .select('*')
     .order('name', { ascending: true });
 
-  if (error) throw error;
+  if (error) {
+    console.error('Error fetching categories:', error);
+    throw error;
+  }
+  
+  console.log('Categories fetched in Recettes:', data);
   return data;
 };
 
 const fetchRecipes = async (categorySlug?: string) => {
+  console.log('Fetching recipes with category slug:', categorySlug);
   let query = supabase
     .from('recipes')
-    .select('*, categories!inner(*)')
+    .select('*, categories(*)')
     .order('created_at', { ascending: false });
 
   if (categorySlug) {
@@ -45,7 +52,12 @@ const fetchRecipes = async (categorySlug?: string) => {
 
   const { data, error } = await query;
 
-  if (error) throw error;
+  if (error) {
+    console.error('Error fetching recipes:', error);
+    throw error;
+  }
+
+  console.log('Recipes fetched:', data);
   return data;
 };
 
@@ -71,7 +83,6 @@ const Recettes = () => {
           Nos Recettes
         </h1>
 
-        {/* Categories filter */}
         <div className="mb-8">
           <div className="flex flex-wrap gap-3 justify-center">
             <button
