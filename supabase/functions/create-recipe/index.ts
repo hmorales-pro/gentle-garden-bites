@@ -13,16 +13,18 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
-interface RecipePayload {
-  nom_recette: string
-  time_preparation: string
+interface RecipeInput {
+  result: {
+    nom_recette: string
+    time_preparation: string
+    ingredients: string[]
+    instruction: string[]
+    anecdote?: string
+    story?: string
+    astuce?: string
+    category_id?: string
+  }
   image?: string
-  ingredients: string[]
-  instructions: string[]
-  anecdote?: string
-  story?: string
-  astuce?: string
-  category_id?: string
 }
 
 async function generateImage(recipeName: string): Promise<string | null> {
@@ -74,14 +76,16 @@ serve(async (req) => {
   try {
     console.log('Receiving request...')
     
-    // Parse the request body
-    const recipeData: RecipePayload = await req.json()
-    console.log('Received recipe data:', recipeData)
+    // Parse the request body with the new structure
+    const inputData: RecipeInput = await req.json()
+    console.log('Received recipe data:', inputData)
 
+    const recipeData = inputData.result
+    
     // Validate required fields
-    const requiredFields = ['nom_recette', 'time_preparation', 'ingredients', 'instructions']
+    const requiredFields = ['nom_recette', 'time_preparation', 'ingredients', 'instruction']
     for (const field of requiredFields) {
-      if (!recipeData[field as keyof RecipePayload]) {
+      if (!recipeData[field as keyof typeof recipeData]) {
         console.log(`Missing required field: ${field}`)
         return new Response(
           JSON.stringify({ error: `Missing required field: ${field}` }),
@@ -93,30 +97,29 @@ serve(async (req) => {
       }
     }
 
-    // If no image is provided, try to generate one
-    if (!recipeData.image) {
+    // Use provided image or generate one
+    let imageUrl = inputData.image
+    if (!imageUrl) {
       console.log('No image provided, attempting to generate one...')
       const generatedImage = await generateImage(recipeData.nom_recette)
       if (generatedImage) {
-        recipeData.image = generatedImage
+        imageUrl = generatedImage
         console.log('Image generated and added to recipe data')
       } else {
         console.log('Failed to generate image, continuing without image')
       }
     }
     
-    // Generate the slug from just the recipe name
+    // Generate the slug from the recipe name
     const slug = generateSlug(recipeData.nom_recette)
     console.log('Generated slug:', slug)
 
-    // Prepare the data for insertion, mapping 'instructions' to 'instruction'
+    // Prepare the data for insertion
     const dataToInsert = {
       ...recipeData,
-      instruction: recipeData.instructions,
+      image: imageUrl,
       slug,
     }
-    // Remove the original instructions field as it's not in the database schema
-    delete (dataToInsert as any).instructions
 
     // Insert the recipe into the database
     console.log('Attempting to insert recipe with data:', dataToInsert)
