@@ -18,12 +18,13 @@ interface RecipeInput {
     nom_recette: string
     time_preparation: string
     ingredients: string[]
-    instruction: string[]
+    instructions?: string[] // Champ optionnel pour la compatibilité
+    instruction?: string[] // Champ de la base de données
     anecdote?: string
     story?: string
     astuce?: string
     category_id?: string
-    category_slug?: string // Nouveau champ optionnel pour le slug de la catégorie
+    category_slug?: string
   }
   image?: string
 }
@@ -90,7 +91,6 @@ async function getCategoryId(slug: string): Promise<string | null> {
 }
 
 serve(async (req) => {
-  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders })
   }
@@ -98,14 +98,13 @@ serve(async (req) => {
   try {
     console.log('Receiving request...')
     
-    // Parse the request body with the new structure
     const inputData: RecipeInput = await req.json()
     console.log('Received recipe data:', inputData)
 
     const recipeData = inputData.result
     
-    // Validate required fields
-    const requiredFields = ['nom_recette', 'time_preparation', 'ingredients', 'instruction']
+    // Validation des champs requis
+    const requiredFields = ['nom_recette', 'time_preparation', 'ingredients']
     for (const field of requiredFields) {
       if (!recipeData[field as keyof typeof recipeData]) {
         console.log(`Missing required field: ${field}`)
@@ -129,7 +128,6 @@ serve(async (req) => {
       } else {
         console.log('Category not found for slug:', recipeData.category_slug)
       }
-      // Supprimer le slug de la catégorie car il n'existe pas dans le schéma de la table
       delete recipeData.category_slug
     }
 
@@ -153,8 +151,14 @@ serve(async (req) => {
     // Prepare the data for insertion
     const dataToInsert = {
       ...recipeData,
+      instruction: recipeData.instructions || recipeData.instruction, // Utilise instructions s'il existe, sinon instruction
       image: imageUrl,
       slug,
+    }
+
+    // Remove the instructions field as it's not in the database schema
+    if ('instructions' in dataToInsert) {
+      delete dataToInsert.instructions;
     }
 
     // Insert the recipe into the database
