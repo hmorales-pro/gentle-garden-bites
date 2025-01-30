@@ -1,14 +1,11 @@
 import { useEffect } from 'react';
-import { supabase } from "@/integrations/supabase/client";
 
 export const GoogleAnalytics = () => {
   useEffect(() => {
     const loadGoogleAnalytics = async () => {
-      const { data: { value: gaId } } = await supabase
-        .from('secrets')
-        .select('value')
-        .eq('name', 'GOOGLE_ANALYTICS_ID')
-        .single();
+      // Fetch the GA ID from environment
+      const response = await fetch('https://covontuisogmogvhqmku.supabase.co/functions/v1/get-ga-id');
+      const { gaId } = await response.json();
 
       if (!gaId) return;
 
