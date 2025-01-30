@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { useGoogleAnalytics } from "@/hooks/useGoogleAnalytics";
+import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 import Index from "./pages/Index";
 import Recettes from "./pages/Recettes";
 import About from "./pages/About";
@@ -36,6 +37,7 @@ const AppContent = () => {
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
+      <GoogleAnalytics />
       <Toaster />
       <Sonner />
       <BrowserRouter>
