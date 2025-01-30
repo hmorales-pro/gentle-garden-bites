@@ -1,12 +1,18 @@
 import { useEffect } from 'react';
+import { supabase } from "@/integrations/supabase/client";
 
 export const GoogleAnalytics = () => {
   useEffect(() => {
     const loadGoogleAnalytics = async () => {
-      // Fetch the GA ID from environment
-      const response = await fetch('https://covontuisogmogvhqmku.supabase.co/functions/v1/get-ga-id');
-      const { gaId } = await response.json();
+      // Fetch the GA ID using Supabase client
+      const { data, error } = await supabase.functions.invoke('get-ga-id');
+      
+      if (error) {
+        console.error('Error fetching GA ID:', error);
+        return;
+      }
 
+      const { gaId } = data;
       if (!gaId) return;
 
       // Create and append the first script
