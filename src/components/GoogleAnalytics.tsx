@@ -1,9 +1,13 @@
 import { useEffect } from 'react';
 import { supabase } from "@/integrations/supabase/client";
+import { CookieConsent } from './CookieConsent';
 
 export const GoogleAnalytics = () => {
   useEffect(() => {
     const loadGoogleAnalytics = async () => {
+      const consent = localStorage.getItem("ga-consent");
+      if (consent !== "accepted") return;
+
       // Fetch the GA ID using Supabase client
       const { data, error } = await supabase.functions.invoke('get-ga-id');
       
@@ -27,7 +31,9 @@ export const GoogleAnalytics = () => {
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-        gtag('config', '${gaId}');
+        gtag('config', '${gaId}', {
+          'cookie_flags': 'SameSite=None;Secure'
+        });
       `;
       document.head.appendChild(script2);
     };
@@ -35,5 +41,5 @@ export const GoogleAnalytics = () => {
     loadGoogleAnalytics();
   }, []);
 
-  return null;
+  return <CookieConsent />;
 };

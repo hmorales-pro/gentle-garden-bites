@@ -15,6 +15,9 @@ export const useGoogleAnalytics = () => {
   const location = useLocation();
 
   useEffect(() => {
+    const consent = localStorage.getItem("ga-consent");
+    if (consent !== "accepted") return;
+
     if (typeof window.gtag !== 'undefined') {
       window.gtag('event', 'page_view', {
         page_path: location.pathname,
